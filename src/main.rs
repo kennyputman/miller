@@ -1,28 +1,34 @@
 use std::{
     env,
     io::{self, Write},
+    process,
 };
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    if args.len() > 2 {
-        println!("Usage: miller [script]");
-    } else if args.len() == 2 {
-        run_file(&args[1]);
-    } else {
-        run_prompt();
+    let args: Vec<String> = env::args().skip(1).collect();
+    match args.len() {
+        0 => run_prompt(),
+        1 => run_file(&args[0]),
+        _ => {
+            println!("Usage: miller [script]");
+            process::exit(1);
+        }
     }
 }
 
 fn run_file(path: &String) {
-    match std::fs::read(&path) {
-        Ok(bytes) => {
-            println!("{:?}", std::str::from_utf8(&bytes).unwrap());
+    match std::fs::read_to_string(path) {
+        Ok(source) => {
+            run(&source);
         }
         Err(e) => {
             panic!("{}", e);
         }
     }
+}
+
+fn run(source: &String) {
+    println!("{}", source)
 }
 
 fn run_prompt() {
