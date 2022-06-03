@@ -1,3 +1,5 @@
+#[derive(Debug)]
+#[allow(dead_code)]
 pub enum TokenType {
     LeftParen,
     RightParen,
@@ -20,6 +22,7 @@ pub enum TokenType {
     Less,
     LessEqual,
 
+    // Literals
     Identifier,
     String,
     Number,
@@ -43,4 +46,12 @@ pub enum TokenType {
     While,
 
     Eof,
+}
+
+#[derive(Debug)]
+pub struct Token {
+    pub token: TokenType,
+    pub lexeme: String,
+    pub literal: String,
+    pub line: u32,
 }

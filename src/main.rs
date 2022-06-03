@@ -4,7 +4,18 @@ use std::{
     process,
 };
 
+mod token;
+
 fn main() {
+    let test = token::Token {
+        token: token::TokenType::Semicolon,
+        lexeme: String::from(":"),
+        literal: String::from(":"),
+        line: 23,
+    };
+
+    println!("{:?}", test);
+
     let args: Vec<String> = env::args().skip(1).collect();
     match args.len() {
         0 => run_prompt(),
