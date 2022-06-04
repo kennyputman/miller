@@ -4,24 +4,16 @@ use std::{
     process,
 };
 
+mod scanner;
 mod token;
 
 fn main() {
-    let test = token::Token {
-        token: token::TokenType::Semicolon,
-        lexeme: String::from(":"),
-        literal: String::from(":"),
-        line: 23,
-    };
-
-    println!("{:?}", test);
-
     let args: Vec<String> = env::args().skip(1).collect();
     match args.len() {
         0 => run_prompt(),
         1 => run_file(&args[0]),
         _ => {
-            println!("Usage: miller [script]");
+            println!("Usage: miller [filepath]");
             process::exit(1);
         }
     }
@@ -39,7 +31,11 @@ fn run_file(path: &String) {
 }
 
 fn run(source: &String) {
-    println!("{}", source)
+    let tokens = scanner::scan_tokens(source.to_string());
+
+    for token in tokens {
+        println!("{:?}", token);
+    }
 }
 
 fn run_prompt() {

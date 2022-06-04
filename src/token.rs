@@ -51,7 +51,7 @@ pub enum TokenType {
 #[derive(Debug)]
 pub struct Token {
     pub token: TokenType,
-    pub lexeme: String,
-    pub literal: String,
-    pub line: u32,
+    // pub lexeme: String,
+    // pub literal: String,
+    // pub line: u32,
 }
