@@ -3,5 +3,12 @@
 version = 3
 
 [[package]]
-name = "miller"
+name = "miller_cli"
+version = "0.1.0"
+dependencies = [
+ "miller_compiler",
+]
+
+[[package]]
+name = "miller_compiler"
 version = "0.1.0"

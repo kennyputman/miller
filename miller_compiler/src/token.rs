@@ -1,5 +1,5 @@
 #[derive(Debug)]
-#[allow(dead_code)]
+
 pub enum TokenType {
     LeftParen,
     RightParen,
