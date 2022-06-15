@@ -4,7 +4,7 @@ use std::{
     process,
 };
 
-use miller_compiler::scanner;
+use miller_core::scanner;
 
 fn main() {
     let args: Vec<String> = env::args().skip(1).collect();
