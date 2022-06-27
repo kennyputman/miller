@@ -19,15 +19,10 @@ impl Scanner {
         }
     }
     pub fn scan_tokens(&mut self) {
-        while self.current <= self.source.len() - 1 {
+        while !self.is_at_end() {
             self.start = self.current;
             let char = self.source.chars().nth(self.current).unwrap();
             self.current += 1;
-
-            if self.current == self.source.len() {
-                self.make_token(TokenType::Eof);
-                break;
-            }
 
             match char {
                 '(' => self.make_token(TokenType::LeftParen),
@@ -43,6 +38,8 @@ impl Scanner {
                 _ => self.make_token(TokenType::NotFound),
             }
         }
+
+        self.make_token(TokenType::Eof)
     }
 
     fn make_token(&mut self, token_type: TokenType) {
@@ -55,12 +52,15 @@ impl Scanner {
         );
         self.tokens.push(new_token);
     }
-    // @@@@@ need to cleanup end of line error
-    fn peak(source: &String, current: &usize) -> Result<char, ()> {
-        if current - 1 == source.len() {
-            Err(())
-        } else {
-            Ok(source.chars().nth(current + 1).unwrap())
-        }
+    // fn peak(&self, source: &String, current: &usize) -> Result<char, ()> {
+    //     if current - 1 == source.len() {
+    //         Err(())
+    //     } else {
+    //         Ok(source.chars().nth(current + 1).unwrap())
+    //     }
+    // }
+
+    fn is_at_end(&self) -> bool {
+        self.current >= self.source.len()
     }
 }
