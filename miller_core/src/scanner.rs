@@ -1,43 +1,66 @@
-use crate::token::{Token, TokenType};
+use crate::token::{self, Token, TokenType};
 
-pub fn scan_tokens(source: String) -> Vec<Token> {
-    let mut tokens: Vec<Token> = Vec::new();
-    let mut current = 0;
-    let mut start = 0;
+pub struct Scanner {
+    source: String,
+    pub tokens: Vec<Token>,
+    line: i32,
+    current: usize,
+    start: usize,
+}
 
-    while current <= source.len() - 1 {
-        start = current;
-        let char = source.chars().nth(current).unwrap();
-        current += 1;
-
-        if current == source.len() {
-            tokens.push(Token::new(TokenType::Eof, 33));
-            break;
+impl Scanner {
+    pub fn new(source: String) -> Self {
+        Scanner {
+            source,
+            tokens: Vec::new(),
+            line: 1,
+            current: 0,
+            start: 0,
         }
+    }
+    pub fn scan_tokens(&mut self) {
+        while self.current <= self.source.len() - 1 {
+            self.start = self.current;
+            let char = self.source.chars().nth(self.current).unwrap();
+            self.current += 1;
 
-        match char {
-            '(' => tokens.push(Token::new(TokenType::LeftParen, 32)),
-            ')' => tokens.push(Token::new(TokenType::RightParen, 32)),
-            '{' => tokens.push(Token::new(TokenType::LeftBrace, 32)),
-            '}' => tokens.push(Token::new(TokenType::RightBrace, 32)),
-            ';' => tokens.push(Token::new(TokenType::Semicolon, 32)),
-            ',' => tokens.push(Token::new(TokenType::Comma, 32)),
-            '.' => tokens.push(Token::new(TokenType::Dot, 32)),
-            '-' => tokens.push(Token::new(TokenType::Minus, 32)),
-            '+' => tokens.push(Token::new(TokenType::Plus, 32)),
-            '*' => tokens.push(Token::new(TokenType::Star, 32)),
-            _ => tokens.push(Token::new(TokenType::NotFound, 32)),
+            if self.current == self.source.len() {
+                self.make_token(TokenType::Eof);
+                break;
+            }
+
+            match char {
+                '(' => self.make_token(TokenType::LeftParen),
+                ')' => self.make_token(TokenType::RightParen),
+                '{' => self.make_token(TokenType::LeftBrace),
+                '}' => self.make_token(TokenType::RightBrace),
+                ';' => self.make_token(TokenType::Semicolon),
+                ',' => self.make_token(TokenType::Comma),
+                '.' => self.make_token(TokenType::Dot),
+                '-' => self.make_token(TokenType::Minus),
+                '+' => self.make_token(TokenType::Plus),
+                '*' => self.make_token(TokenType::Star),
+                _ => self.make_token(TokenType::NotFound),
+            }
         }
     }
 
-    tokens
-}
-
-// @@@@@ need to cleanup end of line error
-fn peak(source: &String, current: &usize) -> Result<char, ()> {
-    if current - 1 == source.len() {
-        Err(())
-    } else {
-        Ok(source.chars().nth(current + 1).unwrap())
+    fn make_token(&mut self, token_type: TokenType) {
+        let lexeme = &self.source[self.start..self.current];
+        let new_token = Token::new(
+            token_type,
+            lexeme.to_string(),
+            lexeme.to_string(),
+            self.line,
+        );
+        self.tokens.push(new_token);
+    }
+    // @@@@@ need to cleanup end of line error
+    fn peak(source: &String, current: &usize) -> Result<char, ()> {
+        if current - 1 == source.len() {
+            Err(())
+        } else {
+            Ok(source.chars().nth(current + 1).unwrap())
+        }
     }
 }

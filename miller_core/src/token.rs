@@ -53,13 +53,18 @@ pub enum TokenType {
 #[derive(Debug)]
 pub struct Token {
     pub token: TokenType,
-    // pub lexeme: String,
-    // pub literal: String,
-    pub line: u32,
+    pub lexeme: String,
+    pub literal: String,
+    pub line: i32,
 }
 
 impl Token {
-    pub fn new(token: TokenType, line: u32) -> Token {
-        Token { token, line }
+    pub fn new(token: TokenType, lexeme: String, literal: String, line: i32) -> Token {
+        Token {
+            token,
+            lexeme,
+            literal,
+            line,
+        }
     }
 }

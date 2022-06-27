@@ -4,7 +4,7 @@ use std::{
     process,
 };
 
-use miller_core::scanner;
+use miller_core::scanner::Scanner;
 
 fn main() {
     let args: Vec<String> = env::args().skip(1).collect();
@@ -30,9 +30,11 @@ fn run_file(path: &String) {
 }
 
 fn run(source: &String) {
-    let tokens = scanner::scan_tokens(source.to_string());
+    let mut scanner = Scanner::new(source.to_string());
 
-    for token in tokens {
+    scanner.scan_tokens();
+
+    for token in scanner.tokens {
         println!("{:?}", token);
     }
 }
